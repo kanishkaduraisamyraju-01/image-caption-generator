@@ -1,0 +1,260 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+<meta charset="UTF-8"> 
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+<title>Image Caption Generator</title>
+</head>
+<body>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap');
+
+    body {
+        
+        font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 0;
+            background-image: url("../static/img.jpg");
+            background-size: cover;
+            background-repeat: no-repeat;
+    }
+
+    .container {
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        width: 80%;
+        max-width: 500px;
+        text-align: center;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgba(255, 255, 255, 0.8);
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+    
+    .container h1 {
+        margin-bottom: 20px;
+    }
+    
+    .container img {
+        max-width: 100%;
+        margin-bottom: 20px;
+    }
+    
+    .container input[type="file"] {
+        margin-bottom: 20px;
+    }
+    
+    .container button {
+        padding: 10px 20px;
+        background: -webkit-linear-gradient(right,#3498db,rgba(232, 109, 74, 0.852));
+        color: white;
+        border-radius: 15px;
+        cursor: pointer;
+        border: none;
+        transition: background-color 0.3s ease;
+    }
+    
+    .container button:hover {
+        background: -webkit-linear-gradient(right,rgba(232, 109, 74, 0.852) ,#3498db);
+        box-shadow: 0 12px 24px 0 rgba(0,0,0,0.2);
+        transform: scale(1.1);
+    }
+    
+    .button-container {
+        
+        top: 10px;
+        right: 10px;
+        top: 10px;
+      margin: 10px;
+      display: flex;
+      gap: 10px;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      margin-top: 150px;
+    }
+    
+    .button-container a {
+        border: none;
+        margin-top: 10px;
+        padding: 15px 25px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 15px;
+        transition-duration: 0.1s;
+        cursor: pointer;
+        border-radius: 15px;
+        background: linear-gradient(to bottom right,white, white);
+        color:black;
+        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+        background-color: rgb(38, 111, 129);
+    }
+    
+    .button-container a:hover {
+        background: -webkit-linear-gradient(right,rgba(232, 109, 74, 0.852) ,#3498db);
+        color: white;
+        box-shadow: 0 12px 24px 0 rgba(0,0,0,0.2);
+        transform: scale(1.1);
+    }
+    
+    .loader {
+        border: 10px solid #f3f3f3;
+  border-top: 10px solid #f3f3f3 ;
+  border-radius: 10%;
+  width: 80px;
+  height: 80px;
+  animation: spin 2s linear infinite;
+
+  position: absolute;
+  top: 47%;
+  left: 47%;
+  transform: translate(-50%, -50%);
+    }
+    
+    .button-container a.active {
+        /* Add your desired styling here for the active button */
+        /* For example: */
+        text-decoration: underline;
+        font-weight: bold;
+        color: rgba(202, 8, 8, 0.852) ;
+    }
+    .bleu-score {
+            font-weight: bold;
+            color: #2a7bb1;
+            margin-left: 10px;
+        }
+    
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+</style>
+
+<div class="button-container">
+    <a href="/about" id="aboutButton" class="btn btn-primary"><b>ABOUT</b></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="/login" id="loginButton" class="btn btn-primary"><B>LOGIN</B></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="/icg" id="icgButton" class="btn btn-primary"><B>IMAGE CAPTION GENERATOR</B></a>    &nbsp;&nbsp;&nbsp;
+    <a href="/contact" id="contactButton" class="btn btn-primary"><B>CONTACT</B></a>    &nbsp;&nbsp;&nbsp;
+</div>
+
+<div class="container" id="captionContainer">
+    <h1>Image Caption Generator</h1>
+    <input type="file" id="image" accept="image/*" onchange="loadFile(event)">
+    <input type="number" id="numCaptions" placeholder="Number of Captions">
+    <img id="preview" src="#" alt="Image Preview" style="display:none;">
+    <button id="toggleButton" onclick="toggleCaption()"><b>START CAPTION</b></button>&nbsp;&nbsp;&nbsp;&nbsp;
+    <ul id="captionList"></ul>
+    <p id="caption" style="display:none;"><b></b></p>
+    <button onclick="speakCaption()"><b>LISTEN TO CAPTION</b></button>
+</div>
+
+<div id="spinner" style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 1;">
+    <div class="loader"></div>
+</div>
+
+<script>
+
+let isCaptionGenerating = false;
+function loadFile(event) {
+            const preview = document.getElementById('preview');
+            preview.src = URL.createObjectURL(event.target.files[0]);
+            preview.onload = function () {
+                URL.revokeObjectURL(preview.src) // free memory
+            }
+            preview.style.display = "block";
+        }
+
+        function toggleCaption() {
+        const captionContainer = document.getElementById("captionContainer");
+        const caption = document.getElementById("caption");
+        const toggleButton = document.getElementById("toggleButton");
+        const numCaptionsInput = document.getElementById("numCaptions");
+
+        if (isCaptionGenerating) {
+            // If caption generation is in progress, cancel it
+            isCaptionGenerating = false;
+            toggleButton.innerText = 'START CAPTION';
+            // You can also hide the spinner if it's currently displayed
+            document.getElementById('spinner').style.display = 'none';
+            return;
+        }
+
+        // If caption generation is not in progress, start it
+        isCaptionGenerating = true;
+        caption.style.display = 'block';
+        toggleButton.innerText = 'STOP CAPTION';
+        generateCaption(numCaptionsInput.value);
+    }
+
+
+        function generateCaption(numCaptions) {
+            const captionContainer = document.getElementById("captionContainer");
+            const captionList = document.getElementById("captionList");
+            const file = document.getElementById("image").files[0];
+            const formData = new FormData();
+            formData.append("image", file);
+            formData.append("num_captions", numCaptions);
+
+            // Show the spinner
+            document.getElementById('spinner').style.display = 'block';
+
+            // Check if caption generation is already in progress
+            if (caption.dataset.isGenerating === 'true') {
+                return;
+            }
+
+            caption.dataset.isGenerating = 'true';
+
+            fetch("/", {
+                method: "POST",
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        caption.innerText = `Error: ${data.error}`;
+                    } else {
+                        const predictions = data.predictions;
+                        const bleuScores = data.bleu_scores; // Extract BLEU scores from the data
+
+                        // Display generated captions and BLEU scores
+                        for (let i = 0; i < predictions.length; i++) {
+                            const listItem = document.createElement("li");
+                            listItem.innerHTML = `${predictions[i]} <span class="bleu-score">(BLEU Score: ${bleuScores[i]})</span>`;
+                            captionList.appendChild(listItem);
+                        }
+
+                        // Scroll to the end of the captions
+                        captionContainer.scrollIntoView({
+                            behavior: "smooth",
+                            block: "end"
+                        });
+                    }
+                    caption.dataset.isGenerating = 'false';
+                })
+                .catch(error => {
+                    captionList.innerHTML = `<li>Error: ${error}</li>`;
+                    caption.dataset.isGenerating = 'false';
+                })
+                .finally(() => {
+                    // Hide the spinner regardless of success or failure
+                    document.getElementById('spinner').style.display = 'none';
+                });
+        }
+
+        function speakCaption() {
+            const captionListItems = document.querySelectorAll("#captionList li");
+            const captions = Array.from(captionListItems).map(li => li.innerText).join('. ');
+
+            const speech = new SpeechSynthesisUtterance();
+            speech.text = captions;
+            speech.lang = "en-US";
+
+            speechSynthesis.speak(speech);
+        }
+</script>
+</body>
+</html>

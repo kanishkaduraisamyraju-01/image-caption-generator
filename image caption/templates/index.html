@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Image Caption Generator</title>
+  <style>
+    body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 0;
+            background-image: url("../static/img.jpg");
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+        .button-container {
+        top: 10px;
+      margin: 10px;
+      display: flex;
+      gap: 10px;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      margin-top: 150px;
+    }
+    .button-container a {
+      border: none;
+      margin-top: 10px;
+      padding: 15px 25px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 15px;
+      transition-duration: 0.1s;
+      cursor: pointer;
+      border-radius: 15px;
+      background: linear-gradient(to bottom right,white, white);
+      color:black;
+      box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+      background-color: rgb(38, 111, 129);
+    }
+
+    .button-container a:hover {
+      background: linear-gradient(to bottom right,rgba(232, 109, 74, 0.852),rgba(232, 109, 74, 0.852));
+      color: white;
+      box-shadow: 0 12px 24px 0 rgba(0,0,0,0.2);
+      transform: scale(1.1);
+    }
+    .button-container a.active {
+    /* Add your desired styling here for the active button */
+    /* For example: */
+    text-decoration: underline;
+    font-weight: bold;
+    color:rgba(202, 8, 8, 0.852) ;
+  }
+
+       
+  </style>
+
+
+
+<div class="button-container">
+    <a href="/about" id="aboutButton" class="btn btn-primary"><b>ABOUT</b></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="/login" id="loginButton" class="btn btn-primary"><B>LOGIN</B></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="/icg" id="icgButton" class="btn btn-primary"><B>IMAGE CAPTION GENERATOR</B></a>    &nbsp;&nbsp;&nbsp;
+    <a href="/contact" id="contactButton" class="btn btn-primary"><B>CONTACT</B></a>    &nbsp;&nbsp;&nbsp;
+  </div>
+
+  <script>
+    // Get the current page URL
+    var currentPage = window.location.pathname;
+  
+    // Get references to each button element
+    var aboutButton = document.getElementById("aboutButton");
+    var loginButton = document.getElementById("loginButton");
+    var icgButton = document.getElementById("icgButton");
+    var contactButton = document.getElementById("contactButton");
+  
+    // Check which page we are on and add the 'active' class to the corresponding button
+    if (currentPage === "/about") {
+      aboutButton.classList.add("active");
+    } else if (currentPage === "/login") {
+      loginButton.classList.add("active");
+    } else if (currentPage === "/icg") {
+      icgButton.classList.add("active");
+    } else if (currentPage === "/contact") {
+      contactButton.classList.add("active");
+    }
+  </script>
+  
+</body>
+</html>

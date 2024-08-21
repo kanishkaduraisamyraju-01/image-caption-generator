@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Image Caption Generator</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap');
+
+
+body {
+           font-family:Arial, Helvetica;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 0;
+            background-image: url("../static/img.jpg");
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+        /* ...existing styles... */
+
+    /* ...existing styles... */
+
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 50px;
+        text-align: center;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgba(255, 255, 255, 0.8);
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    h1 {
+        font-size: 32px;
+        margin-bottom: 30px;
+        color:black;
+    }
+
+    p {
+        font-size: 18px;
+        line-height: 1.5;
+        margin-bottom: 20px;
+        color:rgba(202, 8, 8, 0.852);
+    }
+    .button-container {
+        top: 10px;
+      margin: 10px;
+      display: flex;
+      gap: 10px;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      margin-top: 150px;}
+      
+    .button-container a {
+      border: none;
+      margin-top: 10px;
+      padding: 15px 25px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 15px;
+      transition-duration: 0.1s;
+      cursor: pointer;
+      border-radius: 15px;
+      background: linear-gradient(to bottom right,white, white);
+      color:black;
+      box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+      background-color: rgb(38, 111, 129);
+    }
+
+    .button-container a:hover {
+      background: -webkit-linear-gradient(right,rgba(232, 109, 74, 0.852) ,#3498db);
+      color: white;
+      box-shadow: 0 12px 24px 0 rgba(0,0,0,0.2);
+      transform: scale(1.1);
+    }
+    .button-container a.active {
+    /* Add your desired styling here for the active button */
+    /* For example: */
+    text-decoration: underline;
+    font-weight: bold;
+    color:rgba(202, 8, 8, 0.852) ;
+  }
+  </style>
+
+
+<div class="button-container">
+  <a href="/about" id="aboutButton" class="btn btn-primary"><b>ABOUT</b></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="/login" id="loginButton" class="btn btn-primary"><B>LOGIN</B></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="/icg" id="icgButton" class="btn btn-primary"><B>IMAGE CAPTION GENERATOR</B></a>    &nbsp;&nbsp;&nbsp;
+  <a href="/contact" id="contactButton" class="btn btn-primary"><B>CONTACT</B></a>    &nbsp;&nbsp;&nbsp;
+</div>
+
+  <div class="container">
+   <b><h1>WELCOME</h1>
+    <p>Interested in captioning your image? Make it easier here.</p>
+    <p>Enter your details in the "LOGIN PAGE" to start captioning.</p></b>
+  </div>
+  <script>
+    // Get the current page URL
+    var currentPage = window.location.pathname;
+  
+    // Get references to each button element
+    var aboutButton = document.getElementById("aboutButton");
+    var loginButton = document.getElementById("loginButton");
+    var icgButton = document.getElementById("icgButton");
+    var contactButton = document.getElementById("contactButton");
+  
+    // Check which page we are on and add the 'active' class to the corresponding button
+    if (currentPage === "/about") {
+      aboutButton.classList.add("active");
+    } else if (currentPage === "/login") {
+      loginButton.classList.add("active");
+    } else if (currentPage === "/icg") {
+      icgButton.classList.add("active");
+    } else if (currentPage === "/contact") {
+      contactButton.classList.add("active");
+    }
+  </script>
+  
+</body>
+</html>
